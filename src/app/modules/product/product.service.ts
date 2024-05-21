@@ -8,8 +8,12 @@ const createProductDB = async (data: Tproduct) => {
   return result;
 };
 
-const getallProductDB = async () => {
-  const result = await product.find();
+const getallProductDB = async (searchTerm: string) => {
+  let query = {};
+  if (searchTerm) {
+    query = { name: { $regex: searchTerm, $options: 'i' } };
+  }
+  const result = await product.find(query);
   return result;
 };
 
