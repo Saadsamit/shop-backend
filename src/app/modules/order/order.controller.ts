@@ -12,10 +12,10 @@ const newOrder = async (req: Request, res: Response) => {
       message: 'Order created successfully!',
       data: result,
     });
-  } catch (err) {
+  } catch (err:any) {
     res.status(400).send({
       success: false,
-      message: 'Fail to Create Order Data!',
+      message: err.message || 'Fail to Create Order Data!',
       data: err,
     });
   }
