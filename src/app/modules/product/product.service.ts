@@ -1,10 +1,8 @@
 import { Tproduct } from './product.intreface';
 import { product } from './product.model';
-import productValidationSchema from './product.validation';
 
 const createProductDB = async (data: Tproduct) => {
-  const productData = productValidationSchema.parse(data);
-  const result = await product.create(productData);
+  const result = await product.create(data);
   return result;
 };
 
@@ -23,7 +21,7 @@ const getProductByIdDB = async (id: string) => {
 };
 
 const updateProductDB = async (id: string, data: object) => {
-  const result = await product.updateOne({ _id: id }, data);
+  const result = await product.updateOne({ _id: id }, { $set: data });
   return result;
 };
 

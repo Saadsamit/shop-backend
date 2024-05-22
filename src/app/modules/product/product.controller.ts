@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 import { productService } from './product.service';
+import productValidationSchema from './product.validation';
 
 const createProduct = async (req: Request, res: Response) => {
   try {
     const data = req.body;
-    const result = await productService.createProductDB(data);
+    const productData = productValidationSchema.parse(data);
+    const result = await productService.createProductDB(productData);
     res.status(200).send({
       success: true,
       message: 'Product created successfully!',
@@ -21,7 +23,7 @@ const createProduct = async (req: Request, res: Response) => {
 
 const getallProduct = async (req: Request, res: Response) => {
   try {
-    const searchTerm = req.query.searchTerm
+    const searchTerm = req.query.searchTerm;
     const result = await productService.getallProductDB(searchTerm as string);
     res.status(200).send({
       success: true,
@@ -59,8 +61,9 @@ const updateProduct = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
     const data = req.body;
-    const result = await productService.updateProductDB(productId, data);
-    if (result.acknowledged) {
+    const productData = productValidationSchema.partial().parse(data);
+    const result = await productService.updateProductDB(productId, productData);
+    if (result.modifiedCount === 1) {
       res.status(200).send({
         success: true,
         message: 'Product updated successfully!',

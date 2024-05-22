@@ -1,4 +1,10 @@
-import express, { Application, Request, Response } from 'express';
+import express, {
+  Application,
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+} from 'express';
 import cors from 'cors';
 import env from './app/config';
 import { productRoute } from './app/modules/product/product.route';
@@ -25,6 +31,17 @@ app.all('*', (req: Request, res: Response) => {
     success: false,
     message: `Route not found`,
   });
+});
+
+// global error handler
+
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+  if (error) {
+    res.status(400).json({
+      success: false,
+      message: 'Something went wrong',
+    });
+  }
 });
 
 export default app;

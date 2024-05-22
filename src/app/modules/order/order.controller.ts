@@ -12,10 +12,14 @@ const newOrder = async (req: Request, res: Response) => {
       message: 'Order created successfully!',
       data: result,
     });
-  } catch (err:any) {
+  } catch (err: any) {
     res.status(400).send({
       success: false,
-      message: err.message || 'Fail to Create Order Data!',
+      message:
+        err.message === "You Can't Enter 0 or Minus Value in Quantity" ||
+        err.massage === 'Insufficient quantity available in inventory'
+          ? err.message
+          : 'Fail to Create Order Data!',
       data: err,
     });
   }
